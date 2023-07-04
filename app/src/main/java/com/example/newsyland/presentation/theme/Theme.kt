@@ -1,4 +1,4 @@
-package com.example.newsyland.ui.theme
+package com.example.newsyland.presentation.theme
 
 import android.app.Activity
 import android.os.Build
