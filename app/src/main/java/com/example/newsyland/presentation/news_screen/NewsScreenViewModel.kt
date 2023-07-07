@@ -8,20 +8,29 @@ import androidx.lifecycle.viewModelScope
 import com.example.newsyland.domain.model.Article
 import com.example.newsyland.domain.repository.NewsRepository
 import com.example.newsyland.util.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NewsScreenViewModel(private val newsRepository: NewsRepository) : ViewModel() {
+@HiltViewModel
+class NewsScreenViewModel @Inject constructor(
+    private val newsRepository: NewsRepository
+) : ViewModel() {
 
     var articles by mutableStateOf<List<Article>>(emptyList())
 
-    private fun getNewsArticles(category: String){
+    init {
+        getNewsArticles(category = "general")
+    }
+    private fun getNewsArticles(category: String) {
         viewModelScope.launch {
             val result = newsRepository.getTopHeadlines(category = category)
 
-            when(result){
+            when (result) {
                 is Resource.Success -> {
                     articles = result.data ?: emptyList()
                 }
+
                 is Resource.Error -> TODO()
             }
         }
