@@ -39,7 +39,7 @@ fun NewsArticleCard(
         shape = RoundedCornerShape(8.dp),
         // modifier = modifier.size(280.dp, 240.dp)
         modifier = Modifier
-            .padding(1.dp, 1.dp, 1.dp, 12.dp)
+            .padding(1.dp, 1.dp, 1.dp, 10.dp)
             .clickable { onCardClicked(article) },
         //set card elevation of the card
         elevation = CardDefaults.cardElevation(
@@ -80,11 +80,11 @@ fun NewsArticleCard(
                         text = article.source.name,
                         //maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.labelSmall,
                     )
                     Text(
                         text = article.publishedAt ?: "",
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.labelSmall,
                     )
 
                 }
