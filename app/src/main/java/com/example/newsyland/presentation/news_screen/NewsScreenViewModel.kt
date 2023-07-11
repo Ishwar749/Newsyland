@@ -17,21 +17,40 @@ class NewsScreenViewModel @Inject constructor(
     private val newsRepository: NewsRepository
 ) : ViewModel() {
 
-    var articles by mutableStateOf<List<Article>>(emptyList())
+    var state by mutableStateOf(NewsScreenState())
 
-    init {
-        getNewsArticles(category = "general")
+
+    fun onEvent(event: NewsScreenEvent){
+        when(event){
+            is NewsScreenEvent.OnCategoryChanged -> {
+                state = state.copy(category = event.category)
+                getNewsArticles(category = state.category)
+            }
+            NewsScreenEvent.OnCloseIconClicked -> TODO()
+            is NewsScreenEvent.OnNewsCardClicked -> TODO()
+            NewsScreenEvent.OnSearchIconClicked -> TODO()
+            is NewsScreenEvent.OnSearchQueryChanged -> TODO()
+        }
     }
     private fun getNewsArticles(category: String) {
         viewModelScope.launch {
+            state = state.copy(isLoading = false)
             val result = newsRepository.getTopHeadlines(category = category)
-
             when (result) {
                 is Resource.Success -> {
-                    articles = result.data ?: emptyList()
+                    state = state.copy(
+                        articles = result.data ?: emptyList(),
+                        isLoading = false,
+                        error = null
+                    )
                 }
-
-                is Resource.Error -> TODO()
+                is Resource.Error -> {
+                    state = state.copy(
+                        articles = emptyList(),
+                        isLoading = false,
+                        error = result.message
+                    )
+                }
             }
         }
     }
